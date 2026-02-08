@@ -3,206 +3,444 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-<!-- =========================
- 🔧 EASY EDIT SECTION (ONLY EDIT THIS)
- ========================= -->
-
 <title>For Sneka ❤️</title>
 
-<script>
-/* BASIC DETAILS */
-const GIRL_NAME = "Jessi";
-const QUESTION_TEXT = "Will you Marry Me 💍🫂👩‍❤️‍💋‍👨💕?";
-const LOVE_TEXT = "I love you Jessi 💕";
-
-/* FILE NAMES (same folder) */
-const IMAGE_FILE = "her.jpeg";
-const MUSIC_FILE = "music.mpeg";
-const VOICE_FILE = "voice.mpeg";
-
-/* WHATSAPP */
-const WHATSAPP_NUMBER = "917904090248";
-const WHATSAPP_MESSAGE = "I said Yes 💕 I love you forever 💍";
-
-/* NO BUTTON POPUP MESSAGES */
-const NO_MESSAGES = [
-  "No? Are you sure? 😜",
-  "Hey! Don’t be shy 😏",
-  "Oops! Try again 😂",
-  "My heart says YES 💓",
-  "I’ll wait for you 🥺",
-  "Chocolate ready 🍫",
-  "You + Me = Forever 💞"
-];
-</script>
-
-<!-- =========================
- ❌ DO NOT EDIT BELOW
- ========================= -->
-
+<!-- Google Fonts: Comic Neue for fun handwritten style -->
 <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 
+<!-- Open Graph / Social Meta Tags -->
+<meta property="og:title" content="Will you be my Valentine? ❤️" />
+<meta property="og:description" content="Click here for a special surprise just for you!" />
+<meta property="og:image" content="https://nandhakumar51.github.io/Sneka/her.jpeg" />
+<meta property="og:url" content="https://nandhakumar51.github.io/Sneka/" />
+<meta name="twitter:card" content="summary_large_image" />
+
 <style>
-html,body{
-  margin:0;padding:0;
-  font-family:Arial,sans-serif;
-  background:#ffc0cb;
-  text-align:center;
-  min-height:100vh;
-  overflow:hidden;
-}
+  html, body {
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, sans-serif;
+    background: #ffc0cb;
+    text-align: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+  }
 
-h2{margin-top:30px;color:#8b004f;}
+  /* Canvas full screen behind everything */
+  #heartCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* so clicks pass through */
+    z-index: 1;
+  }
 
-#msg{
-  font-size:26px;
-  font-weight:bold;
-  min-height:70px;
-  background:#ffb6c1;
-  border:3px solid #ff1493;
-  border-radius:16px;
-  padding:18px;
-  margin:20px;
-  color:#a00050;
-}
+  /* Main content above canvas */
+  #mainContent {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 600px;
+  }
 
-button{
-  padding:14px 28px;
-  font-size:20px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-}
+  h2 {
+    margin-top: 30px;
+    color: #8b004f;
+    z-index: 10;
+  }
 
-#startBtn{
-  background:#ff4d88;
-  color:white;
-}
+  #btnContainer {
+    position: relative;
+    margin-top: 20px;
+    width: 320px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+  }
 
-#yesBtn{
-  background:#ff4d88;
-  color:white;
-  animation:beat 2s infinite;
-}
+  button {
+    padding: 12px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    user-select: none;
+    position: relative;
+  }
 
-#noBtn{
-  background:#ff77aa;
-  color:white;
-  position:relative;
-}
+  button:hover {
+    transform: scale(1.1);
+  }
 
-@keyframes beat{
-  50%{transform:scale(1.15);}
-}
+  #yesBtn {
+    background: #ff4d88;
+    color: white;
+    animation: heartbeat 2s infinite;
+    z-index: 11;
+  }
 
-#btnContainer{
-  display:none;
-  gap:20px;
-  justify-content:center;
-}
+  #noBtn {
+    background: #ff77aa;
+    color: white;
+    font-weight: bold;
+    border-radius: 12px;
+    font-size: 20px;
+    box-shadow: 0 4px 8px rgba(255, 20, 147, 0.6);
+    z-index: 11;
+    animation: gentleShake 3s infinite ease-in-out;
+  }
 
-#photoBox{
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  margin-top:20px;
-}
+  #noBtn:hover {
+    background: #ff4d88;
+    box-shadow: 0 6px 12px rgba(255, 20, 147, 0.9);
+  }
 
-#photo{
-  width:260px;
-  border-radius:20px;
-  animation:float 5s ease-in-out infinite;
-}
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
 
-@keyframes float{
-  50%{transform:translateY(-15px);}
-}
+  @keyframes gentleShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(4px, -3px) rotate(-3deg); }
+    50% { transform: translate(-4px, 3px) rotate(3deg); }
+    75% { transform: translate(3px, -2px) rotate(-2deg); }
+  }
 
-#loveText{
-  font-family:'Comic Neue',cursive;
-  font-size:30px;
-  margin-top:10px;
-  color:#b3005e;
-}
-audio{display:none;}
+  #msg {
+    min-height: 90px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #d1006c;
+    background: linear-gradient(135deg, #ffb6c1 0%, #ff69b4 100%);
+    border: 3px solid #ff1493;
+    border-radius: 16px;
+    padding: 20px 30px;
+    margin: 25px auto;
+    max-width: 90vw;
+    box-sizing: border-box;
+    text-shadow: 1px 1px 2px #900048;
+    box-shadow: 0 0 20px #ff69b4;
+    user-select: none;
+    position: relative;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+    line-height: 1.3;
+  }
+
+  #photoBox {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    max-width: 90vw;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 1s ease;
+    position: relative;
+    z-index: 20;
+    border-radius: 20px;
+    box-shadow: 0 0 15px #ff6699;
+    animation: sparkle 2.5s infinite;
+    overflow: visible;
+    animation-name: sparkle, floatImage;
+    animation-duration: 2.5s, 6s;
+    animation-iteration-count: infinite, infinite;
+    animation-timing-function: ease-in-out, ease-in-out;
+  }
+
+  #photoBox.show {
+    opacity: 1;
+  }
+
+  #photo {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    position: relative;
+    z-index: 20;
+    animation: floatImage 6s ease-in-out infinite;
+  }
+
+  /* UPDATED LOVE TEXT STYLE */
+  #loveText {
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    font-size: 28px;
+    background: linear-gradient(45deg, #ff6699, #ff3366, #ff6699);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 6px #a3004d;
+    margin-top: 10px;
+    word-wrap: break-word;
+    position: relative;
+    z-index: 20;
+    animation: bounceText 3s ease-in-out infinite;
+  }
+
+  @keyframes bounceText {
+    0%, 100% {
+      transform: translateY(0);
+      text-shadow: 2px 2px 6px #a3004d;
+    }
+    50% {
+      transform: translateY(-8px);
+      text-shadow: 4px 4px 12px #e60073;
+    }
+  }
+
+  #startBtn {
+    background: #ff4d88;
+    color: white;
+    padding: 14px 32px;
+    font-size: 22px;
+    border-radius: 10px;
+    margin-top: 80px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
+
+  #startBtn:hover {
+    transform: scale(1.1);
+  }
+
+  @keyframes sparkle {
+    0%, 100% {
+      box-shadow:
+        0 0 10px #ff99cc,
+        0 0 20px #ff66bb,
+        0 0 30px #ff3399,
+        0 0 40px #ff0077;
+    }
+    50% {
+      box-shadow:
+        0 0 20px #ff66bb,
+        0 0 30px #ff3399,
+        0 0 40px #ff0077,
+        0 0 50px #ff0055;
+    }
+  }
+
+  @keyframes floatImage {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(8px, -6px);
+    }
+    50% {
+      transform: translate(-8px, 6px);
+    }
+    75% {
+      transform: translate(6px, -4px);
+    }
+  }
 </style>
 </head>
 
 <body>
 
-<h2 id="question"></h2>
+<canvas id="heartCanvas"></canvas>
 
-<div id="msg">Click Start to play music 💕</div>
+<div id="mainContent">
+  <h2>Will you be my Valentine? ❤️</h2>
 
-<button id="startBtn">Start Music 🎵</button>
+  <div id="msg">Click Start to play music 💕</div>
 
-<div id="btnContainer">
-  <button id="yesBtn">YES 💖</button>
-  <button id="noBtn">NO 😅</button>
+  <button id="startBtn">Start Music 🎵</button>
+
+  <div id="btnContainer" style="display:none;">
+    <button id="yesBtn" onclick="yesClicked()">YES 💖</button>
+    <button id="noBtn">NO 😅</button>
+  </div>
+
+  <div id="photoBox">
+    <img id="photo" src="her.jpeg" alt="Sneka's photo" />
+    <div id="loveText">I love you Sneka 💕</div>
+  </div>
 </div>
 
-<div id="photoBox">
-  <img id="photo">
-  <div id="loveText"></div>
-</div>
+<audio id="music" src="music.mpeg" loop></audio>
+<audio id="voice" src="voice.mpeg"></audio>
 
-<audio id="music" loop></audio>
-<audio id="voice"></audio>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
 <script>
-/* AUTO FILL CONTENT */
-document.getElementById("question").innerText = QUESTION_TEXT;
-document.getElementById("loveText").innerText = LOVE_TEXT;
-document.getElementById("photo").src = IMAGE_FILE;
-document.getElementById("music").src = MUSIC_FILE;
-document.getElementById("voice").src = VOICE_FILE;
+const music = document.getElementById("music");
+const voice = document.getElementById("voice");
+const msg = document.getElementById("msg");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const btnContainer = document.getElementById("btnContainer");
+const photoBox = document.getElementById("photoBox");
+const startBtn = document.getElementById("startBtn");
 
-const msg=document.getElementById("msg");
-const startBtn=document.getElementById("startBtn");
-const btnContainer=document.getElementById("btnContainer");
-const noBtn=document.getElementById("noBtn");
-const yesBtn=document.getElementById("yesBtn");
-const photoBox=document.getElementById("photoBox");
-const music=document.getElementById("music");
-const voice=document.getElementById("voice");
+let i = 0;
+let yesClickedFlag = false;
 
-let i=0;
-let yesClicked=false;
+const noTexts = [
+  "No? Are you sure? 😜",
+  "Hey! Don’t be shy, say YES! 😉",
+  "Oops! The NO button is jealous 😅",
+  "My puppy eyes are working, right? 🥺",
+  "I’ll bring chocolates next time! 🍫",
+  "Come on, don’t break my heart 💔",
+  "No way! You’re stuck with me 😎",
+  "You + Me = Forever. Just say YES! 💞"
+];
 
-/* START MUSIC */
-startBtn.onclick=()=>{
-  music.play();
-  startBtn.style.display="none";
-  btnContainer.style.display="flex";
-  msg.innerText="Now choose with your heart 💗";
-};
+// Start music and show yes/no buttons
+startBtn.addEventListener("click", () => {
+  music.play().then(() => {
+    msg.innerText = "Now choose with your heart 💗";
+    startBtn.style.display = "none";
+    btnContainer.style.display = "flex";
+  }).catch(() => {
+    alert("Please allow sound playback.");
+  });
+});
 
-/* NO BUTTON */
-noBtn.onclick=()=>{
-  if(yesClicked)return;
-  msg.innerText = NO_MESSAGES[i % NO_MESSAGES.length];
+// NO button click: instantly update popup message
+noBtn.addEventListener("click", () => {
+  if (yesClickedFlag) return;
+
+  msg.innerText = noTexts[i % noTexts.length];
   i++;
-  noBtn.style.left = Math.random()*120+"px";
-  noBtn.style.top = Math.random()*60+"px";
-};
+});
 
-/* YES BUTTON */
-yesBtn.onclick=()=>{
-  yesClicked=true;
+// YES button click
+function yesClicked() {
+  yesClickedFlag = true;
   music.pause();
-  btnContainer.style.display="none";
-  msg.style.display="none";
-  photoBox.style.display="flex";
+  msg.style.display = "none";
+  btnContainer.style.display = "none";
+
+  photoBox.style.display = "flex";
+  setTimeout(() => {
+    photoBox.classList.add("show");
+  }, 50);
+
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+
   voice.play();
 
-  voice.onended=()=>{
-    const text=encodeURIComponent(WHATSAPP_MESSAGE);
-    window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+  voice.onended = () => {
+    window.location.href =
+      "https://wa.me/917904090248?text=I%20said%20Yes%20%F0%9F%92%95%20i%20love%20you%20forever%20%F0%9F%92%8D";
   };
-};
-</script>
+}
 
+// --------- Heart Rain Animation -----------
+
+const canvas = document.getElementById("heartCanvas");
+const ctx = canvas.getContext("2d");
+
+let W, H;
+function resizeCanvas() {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+function randomRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+class Heart {
+  constructor() {
+    this.x = Math.random() * W;
+    this.y = randomRange(-50, -10);
+    this.size = randomRange(10, 25);
+    this.speed = randomRange(1, 3);
+    this.opacity = randomRange(0.4, 1);
+    this.angle = Math.random() * Math.PI * 2;
+    this.angularSpeed = randomRange(0.01, 0.03);
+    this.colorHue = Math.floor(randomRange(320, 350)); // pink-red hues
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(0, -this.size / 2, -this.size, -this.size / 2, -this.size, 0);
+    ctx.bezierCurveTo(-this.size, this.size / 2, 0, this.size, 0, this.size * 1.5);
+    ctx.bezierCurveTo(0, this.size, this.size, this.size / 2, this.size, 0);
+    ctx.bezierCurveTo(this.size, -this.size / 2, 0, -this.size / 2, 0, 0);
+    ctx.closePath();
+
+    const gradient = ctx.createRadialGradient(0, 0, this.size / 4, 0, 0, this.size);
+    gradient.addColorStop(0, `hsla(${this.colorHue}, 100%, 75%, ${this.opacity})`);
+    gradient.addColorStop(1, `hsla(${this.colorHue}, 100%, 50%, 0)`);
+
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  update() {
+    this.y += this.speed;
+    this.angle += this.angularSpeed;
+
+    if (this.y - this.size * 1.5 > H) {
+      this.x = Math.random() * W;
+      this.y = randomRange(-50, -10);
+      this.speed = randomRange(1, 3);
+      this.size = randomRange(10, 25);
+      this.opacity = randomRange(0.4, 1);
+      this.angle = Math.random() * Math.PI * 2;
+      this.angularSpeed = randomRange(0.01, 0.03);
+      this.colorHue = Math.floor(randomRange(320, 350));
+    }
+  }
+}
+
+const hearts = [];
+const MAX_HEARTS = 60;
+
+for (let i = 0; i < MAX_HEARTS; i++) {
+  hearts.push(new Heart());
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  hearts.forEach(h => {
+    h.update();
+    h.draw();
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+</script>
 </body>
 </html>
-
