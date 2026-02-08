@@ -1,192 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>For Your Loved One ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Sneka ❤️</title>
 
 <style>
-  html, body {
-    margin: 0; padding: 0;
-    font-family: Arial, sans-serif;
-    background: #ffc0cb;
-    text-align: center;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: flex-start; align-items: center;
-  }
-  h2 {
-    margin-top: 30px;
-    color: #8b004f;
-  }
-  button {
-    padding: 12px 28px;
-    font-size: 18px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  #yesBtn { background: #ff4d88; color: white; }
-  #noBtn {
-    background: #eee;
-    position: relative;
-    transition: left 0.3s ease, top 0.3s ease;
-  }
-  #msg {
-    min-height: 50px;
-    font-size: 20px;
-    color: #7a003c;
-  }
-  #photoBox {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    padding: 10px;
-    max-width: 90vw;
-    box-sizing: border-box;
-  }
-  #photo {
-    width: 100%;
-    max-width: 280px;
-    height: auto;
-    border-radius: 20px;
-    object-fit: cover;
-  }
-  #loveText {
-    font-size: 22px;
-    color: #b3005e;
-    margin-top: 10px;
-    word-wrap: break-word;
-  }
-  audio {
-    display: none;
-  }
-  .hidden {
-    display: none !important;
-  }
+html,body{
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+  background:#ffc0cb;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* ---------- STAR SCREEN ---------- */
+#starScreen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  color:white;
+}
+
+.star{
+  position:fixed;
+  color:white;
+  font-size:12px;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh);}
+}
+
+#continueBtn{
+  padding:14px 32px;
+  font-size:22px;
+  border:none;
+  border-radius:25px;
+  background:#ff4d88;
+  color:white;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+/* ---------- MAIN PAGE ---------- */
+#mainPage{display:none;}
+
+h2{margin-top:30px;color:#8b004f;}
+
+#msg{
+  font-size:26px;
+  font-weight:bold;
+  min-height:45px;
+  color:#7a003c;
+}
+
+button{
+  padding:14px 28px;
+  font-size:20px;
+  margin:10px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+#yesBtn{background:#ff4d88;color:white;}
+#noBtn{background:white;position:relative;}
+
+.hidden{display:none!important;}
+
+/* PHOTO */
+#photoBox{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  margin-top:20px;
+}
+
+#photo{
+  width:260px;
+  border-radius:25px;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+  100%{transform:translateY(0)}
+}
+
+#loveText{
+  font-size:32px;
+  font-family:"Comic Sans MS",cursive;
+  color:#b3005e;
+  margin-top:10px;
+}
+
+audio{display:none;}
 </style>
 </head>
 
 <body>
 
-<h2>Will you be my Valentine? ❤️</h2>
-
-<div id="msg">Touch anywhere once 💕</div>
-
-<button id="yesBtn" onclick="yesClicked()">YES 💖</button>
-<button id="noBtn" onclick="noClicked()">NO 😅</button>
-
-<div id="photoBox">
-  <img id="photo" src="" alt="Loved One's Photo" />
-  <div id="loveText"></div>
+<!-- ⭐ STAR + MUSIC SCREEN -->
+<div id="starScreen">
+  <h1>✨ Just one tap ✨</h1>
+  <button id="continueBtn">Continue 💖</button>
 </div>
 
-<!-- Audio elements -->
-<audio id="music" loop></audio>
-<audio id="voice"></audio>
+<!-- 💖 MAIN PAGE -->
+<div id="mainPage">
+  <h2>Will you be my Valentine? ❤️</h2>
+  <div id="msg">Choose with your heart 💗</div>
+
+  <button id="yesBtn">YES 💖</button>
+  <button id="noBtn">NO 😅</button>
+
+  <div id="photoBox">
+    <img id="photo" src="her.jpg">
+    <div id="loveText">I love you Sneka 😘</div>
+  </div>
+</div>
+
+<audio id="music" src="music.mp3" loop></audio>
+<audio id="voice" src="voice.mp3"></audio>
 
 <script>
-/* ======= CUSTOMIZE HERE ======= */
+const starScreen=document.getElementById("starScreen");
+const mainPage=document.getElementById("mainPage");
+const music=document.getElementById("music");
+const voice=document.getElementById("voice");
+const msg=document.getElementById("msg");
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const photoBox=document.getElementById("photoBox");
 
-// Your loved one's name
-const loverName = "Sneka";
-
-// WhatsApp number with country code, no plus or spaces
-const whatsappNumber = "917904090248";
-
-// WhatsApp pre-filled message after YES clicked
-const whatsappMessageText = "I said Yes 💕 I love you forever 💍";
-
-// Filenames for your assets (make sure these files are in the same folder)
-const musicFile = "music.mpeg";
-const voiceFile = "voice.mpeg";
-const photoFile = "her.jpeg";
-
-// Funny popup messages when NO button clicked
-const noTexts = [
-  "You’re the best part of my day 💕",
-  "My heart chose you ❤️",
-  "I promise to cherish us 🌸",
-  "I’ll wait for you ⏳",
-  "We could be beautiful together ✨",
-  "I’m not giving up on us 💖"
+const noTexts=[
+ "Are you sure? 😜",
+ "My heart says YES 💓",
+ "Think again 😂",
+ "Snekaaaa 😅",
+ "I’m waiting 💕"
 ];
 
-/* ======= NO NEED TO EDIT BELOW THIS LINE ======= */
+let i=0;
+let yesClicked=false;
 
-const music = document.getElementById("music");
-const voice = document.getElementById("voice");
-const msg = document.getElementById("msg");
-const noBtn = document.getElementById("noBtn");
-const photoBox = document.getElementById("photoBox");
-const photo = document.getElementById("photo");
-const loveText = document.getElementById("loveText");
-const yesBtn = document.getElementById("yesBtn");
+/* STAR RAIN */
+setInterval(()=>{
+  const s=document.createElement("div");
+  s.className="star";
+  s.innerHTML="⭐";
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=(3+Math.random()*3)+"s";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),6000);
+},200);
 
-let started = false;
-let noClickIndex = 0;
-let yesClickedFlag = false;
+/* CONTINUE */
+document.getElementById("continueBtn").onclick=()=>{
+  music.play();
+  starScreen.style.display="none";
+  mainPage.style.display="block";
+};
 
-// Set audio and photo sources dynamically
-music.src = musicFile;
-voice.src = voiceFile;
-photo.src = photoFile;
+/* NO BUTTON */
+noBtn.onclick=()=>{
+  if(yesClicked)return;
+  msg.innerText=noTexts[i%noTexts.length];
+  i++;
+  noBtn.style.left=Math.random()*140+"px";
+  noBtn.style.top=Math.random()*90+"px";
+};
 
-// Set love text with dynamic name
-loveText.textContent = `I love you ${loverName} 💕`;
-
-// First touch on body to start music (mobile safe)
-document.body.addEventListener("touchstart", () => {
-  if (!started) {
-    music.play().catch(() => {});
-    started = true;
-    msg.innerText = "Now choose with your heart 💗";
-  }
-}, { once: true });
-
-// No button clicked
-function noClicked() {
-  if (yesClickedFlag) return; // Disable if YES clicked
-
-  if (!started) {
-    music.play().then(() => {
-      started = true;
-      msg.innerText = "Now choose with your heart 💗";
-      showNoMessage();
-    }).catch(() => {
-      showNoMessage();
-    });
-  } else {
-    showNoMessage();
-  }
-}
-
-function showNoMessage() {
-  msg.innerText = noTexts[noClickIndex % noTexts.length];
-  noClickIndex++;
-  // Move NO button to random position to be playful
-  noBtn.style.left = Math.random() * 120 + "px";
-  noBtn.style.top = Math.random() * 80 + "px";
-}
-
-// YES button clicked
-function yesClicked() {
-  yesClickedFlag = true;
+/* YES BUTTON */
+yesBtn.onclick=()=>{
+  yesClicked=true;
   music.pause();
-  msg.innerText = "";
-  photoBox.style.display = "flex";
-  noBtn.classList.add("hidden");  // Hide NO button
-  yesBtn.classList.add("hidden"); // Hide YES button
+  yesBtn.classList.add("hidden");
+  noBtn.classList.add("hidden");
+  msg.innerText="";
+  photoBox.style.display="flex";
   voice.play();
 
-  voice.onended = () => {
-    const encodedMessage = encodeURIComponent(whatsappMessageText);
-    window.location.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  voice.onended=()=>{
+    window.location.href=
+    "https://wa.me/917904090248?text=I%20said%20Yes%20💕";
   };
-}
+};
 </script>
 
 </body>
