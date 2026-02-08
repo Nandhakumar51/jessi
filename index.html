@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>For Your Loved One ❤️</title>
+
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    background: #ffc0cb;
+    text-align: center;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: flex-start; align-items: center;
+  }
+  h2 {
+    margin-top: 30px;
+    color: #8b004f;
+  }
+  button {
+    padding: 12px 28px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  #yesBtn { background: #ff4d88; color: white; }
+  #noBtn {
+    background: #eee;
+    position: relative;
+    transition: left 0.3s ease, top 0.3s ease;
+  }
+  #msg {
+    min-height: 50px;
+    font-size: 20px;
+    color: #7a003c;
+  }
+  #photoBox {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    max-width: 90vw;
+    box-sizing: border-box;
+  }
+  #photo {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+  #loveText {
+    font-size: 22px;
+    color: #b3005e;
+    margin-top: 10px;
+    word-wrap: break-word;
+  }
+  audio {
+    display: none;
+  }
+  .hidden {
+    display: none !important;
+  }
+</style>
+</head>
+
+<body>
+
+<h2>Will you be my Valentine? ❤️</h2>
+
+<div id="msg">Touch anywhere once 💕</div>
+
+<button id="yesBtn" onclick="yesClicked()">YES 💖</button>
+<button id="noBtn" onclick="noClicked()">NO 😅</button>
+
+<div id="photoBox">
+  <img id="photo" src="" alt="Loved One's Photo" />
+  <div id="loveText"></div>
+</div>
+
+<!-- Audio elements -->
+<audio id="music" loop></audio>
+<audio id="voice"></audio>
+
+<script>
+/* ======= CUSTOMIZE HERE ======= */
+
+// Your loved one's name
+const loverName = "Sneka";
+
+// WhatsApp number with country code, no plus or spaces
+const whatsappNumber = "917904090248";
+
+// WhatsApp pre-filled message after YES clicked
+const whatsappMessageText = "I said Yes 💕 I love you forever 💍";
+
+// Filenames for your assets (make sure these files are in the same folder)
+const musicFile = "music.mpeg";
+const voiceFile = "voice.mpeg";
+const photoFile = "her.jpeg";
+
+// Funny popup messages when NO button clicked
+const noTexts = [
+  "You’re the best part of my day 💕",
+  "My heart chose you ❤️",
+  "I promise to cherish us 🌸",
+  "I’ll wait for you ⏳",
+  "We could be beautiful together ✨",
+  "I’m not giving up on us 💖"
+];
+
+/* ======= NO NEED TO EDIT BELOW THIS LINE ======= */
+
+const music = document.getElementById("music");
+const voice = document.getElementById("voice");
+const msg = document.getElementById("msg");
+const noBtn = document.getElementById("noBtn");
+const photoBox = document.getElementById("photoBox");
+const photo = document.getElementById("photo");
+const loveText = document.getElementById("loveText");
+const yesBtn = document.getElementById("yesBtn");
+
+let started = false;
+let noClickIndex = 0;
+let yesClickedFlag = false;
+
+// Set audio and photo sources dynamically
+music.src = musicFile;
+voice.src = voiceFile;
+photo.src = photoFile;
+
+// Set love text with dynamic name
+loveText.textContent = `I love you ${loverName} 💕`;
+
+// First touch on body to start music (mobile safe)
+document.body.addEventListener("touchstart", () => {
+  if (!started) {
+    music.play().catch(() => {});
+    started = true;
+    msg.innerText = "Now choose with your heart 💗";
+  }
+}, { once: true });
+
+// No button clicked
+function noClicked() {
+  if (yesClickedFlag) return; // Disable if YES clicked
+
+  if (!started) {
+    music.play().then(() => {
+      started = true;
+      msg.innerText = "Now choose with your heart 💗";
+      showNoMessage();
+    }).catch(() => {
+      showNoMessage();
+    });
+  } else {
+    showNoMessage();
+  }
+}
+
+function showNoMessage() {
+  msg.innerText = noTexts[noClickIndex % noTexts.length];
+  noClickIndex++;
+  // Move NO button to random position to be playful
+  noBtn.style.left = Math.random() * 120 + "px";
+  noBtn.style.top = Math.random() * 80 + "px";
+}
+
+// YES button clicked
+function yesClicked() {
+  yesClickedFlag = true;
+  music.pause();
+  msg.innerText = "";
+  photoBox.style.display = "flex";
+  noBtn.classList.add("hidden");  // Hide NO button
+  yesBtn.classList.add("hidden"); // Hide YES button
+  voice.play();
+
+  voice.onended = () => {
+    const encodedMessage = encodeURIComponent(whatsappMessageText);
+    window.location.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  };
+}
+</script>
+
+</body>
+</html>
