@@ -1,82 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+<!-- =========================
+ 🔧 EASY EDIT SECTION (ONLY EDIT THIS)
+ ========================= -->
+
 <title>For Sneka ❤️</title>
+
+<script>
+/* BASIC DETAILS */
+const GIRL_NAME = "Sneka";
+const QUESTION_TEXT = "Will you Marry Me 💍🫂👩‍❤️‍💋‍👨💕?";
+const LOVE_TEXT = "I love you Sneka 💕";
+
+/* FILE NAMES (same folder) */
+const IMAGE_FILE = "her.jpeg";
+const MUSIC_FILE = "music.mpeg";
+const VOICE_FILE = "voice.mpeg";
+
+/* WHATSAPP */
+const WHATSAPP_NUMBER = "917904090248";
+const WHATSAPP_MESSAGE = "I said Yes 💕 I love you forever 💍";
+
+/* NO BUTTON POPUP MESSAGES */
+const NO_MESSAGES = [
+  "No? Are you sure? 😜",
+  "Hey! Don’t be shy 😏",
+  "Oops! Try again 😂",
+  "My heart says YES 💓",
+  "I’ll wait for you 🥺",
+  "Chocolate ready 🍫",
+  "You + Me = Forever 💞"
+];
+</script>
+
+<!-- =========================
+ ❌ DO NOT EDIT BELOW
+ ========================= -->
+
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 
 <style>
 html,body{
-  margin:0;
-  padding:0;
+  margin:0;padding:0;
   font-family:Arial,sans-serif;
   background:#ffc0cb;
   text-align:center;
+  min-height:100vh;
   overflow:hidden;
 }
-
-/* ---------- STAR SCREEN ---------- */
-#starScreen{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-  color:white;
-}
-
-.star{
-  position:fixed;
-  color:white;
-  font-size:12px;
-  animation:fall linear infinite;
-}
-
-@keyframes fall{
-  to{transform:translateY(110vh);}
-}
-
-#continueBtn{
-  padding:14px 32px;
-  font-size:22px;
-  border:none;
-  border-radius:25px;
-  background:#ff4d88;
-  color:white;
-  cursor:pointer;
-  margin-top:20px;
-}
-
-/* ---------- MAIN PAGE ---------- */
-#mainPage{display:none;}
 
 h2{margin-top:30px;color:#8b004f;}
 
 #msg{
   font-size:26px;
   font-weight:bold;
-  min-height:45px;
-  color:#7a003c;
+  min-height:70px;
+  background:#ffb6c1;
+  border:3px solid #ff1493;
+  border-radius:16px;
+  padding:18px;
+  margin:20px;
+  color:#a00050;
 }
 
 button{
   padding:14px 28px;
   font-size:20px;
-  margin:10px;
   border:none;
   border-radius:12px;
   cursor:pointer;
 }
 
-#yesBtn{background:#ff4d88;color:white;}
-#noBtn{background:white;position:relative;}
+#startBtn{
+  background:#ff4d88;
+  color:white;
+}
 
-.hidden{display:none!important;}
+#yesBtn{
+  background:#ff4d88;
+  color:white;
+  animation:beat 2s infinite;
+}
 
-/* PHOTO */
+#noBtn{
+  background:#ff77aa;
+  color:white;
+  position:relative;
+}
+
+@keyframes beat{
+  50%{transform:scale(1.15);}
+}
+
+#btnContainer{
+  display:none;
+  gap:20px;
+  justify-content:center;
+}
+
 #photoBox{
   display:none;
   flex-direction:column;
@@ -86,113 +111,94 @@ button{
 
 #photo{
   width:260px;
-  border-radius:25px;
-  animation:float 3s ease-in-out infinite;
+  border-radius:20px;
+  animation:float 5s ease-in-out infinite;
 }
 
 @keyframes float{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-15px)}
-  100%{transform:translateY(0)}
+  50%{transform:translateY(-15px);}
 }
 
 #loveText{
-  font-size:32px;
-  font-family:"Comic Sans MS",cursive;
-  color:#b3005e;
+  font-family:'Comic Neue',cursive;
+  font-size:30px;
   margin-top:10px;
+  color:#b3005e;
 }
-
 audio{display:none;}
 </style>
 </head>
 
 <body>
 
-<!-- ⭐ STAR + MUSIC SCREEN -->
-<div id="starScreen">
-  <h1>✨ Just one tap ✨</h1>
-  <button id="continueBtn">Continue 💖</button>
-</div>
+<h2 id="question"></h2>
 
-<!-- 💖 MAIN PAGE -->
-<div id="mainPage">
-  <h2>Will you be my Valentine? ❤️</h2>
-  <div id="msg">Choose with your heart 💗</div>
+<div id="msg">Click Start to play music 💕</div>
 
+<button id="startBtn">Start Music 🎵</button>
+
+<div id="btnContainer">
   <button id="yesBtn">YES 💖</button>
   <button id="noBtn">NO 😅</button>
-
-  <div id="photoBox">
-    <img id="photo" src="her.jpg">
-    <div id="loveText">I love you Sneka 😘</div>
-  </div>
 </div>
 
-<audio id="music" src="music.mp3" loop></audio>
-<audio id="voice" src="voice.mp3"></audio>
+<div id="photoBox">
+  <img id="photo">
+  <div id="loveText"></div>
+</div>
+
+<audio id="music" loop></audio>
+<audio id="voice"></audio>
 
 <script>
-const starScreen=document.getElementById("starScreen");
-const mainPage=document.getElementById("mainPage");
-const music=document.getElementById("music");
-const voice=document.getElementById("voice");
+/* AUTO FILL CONTENT */
+document.getElementById("question").innerText = QUESTION_TEXT;
+document.getElementById("loveText").innerText = LOVE_TEXT;
+document.getElementById("photo").src = IMAGE_FILE;
+document.getElementById("music").src = MUSIC_FILE;
+document.getElementById("voice").src = VOICE_FILE;
+
 const msg=document.getElementById("msg");
+const startBtn=document.getElementById("startBtn");
+const btnContainer=document.getElementById("btnContainer");
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
 const photoBox=document.getElementById("photoBox");
-
-const noTexts=[
- "Are you sure? 😜",
- "My heart says YES 💓",
- "Think again 😂",
- "Snekaaaa 😅",
- "I’m waiting 💕"
-];
+const music=document.getElementById("music");
+const voice=document.getElementById("voice");
 
 let i=0;
 let yesClicked=false;
 
-/* STAR RAIN */
-setInterval(()=>{
-  const s=document.createElement("div");
-  s.className="star";
-  s.innerHTML="⭐";
-  s.style.left=Math.random()*100+"vw";
-  s.style.animationDuration=(3+Math.random()*3)+"s";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),6000);
-},200);
-
-/* CONTINUE */
-document.getElementById("continueBtn").onclick=()=>{
+/* START MUSIC */
+startBtn.onclick=()=>{
   music.play();
-  starScreen.style.display="none";
-  mainPage.style.display="block";
+  startBtn.style.display="none";
+  btnContainer.style.display="flex";
+  msg.innerText="Now choose with your heart 💗";
 };
 
 /* NO BUTTON */
 noBtn.onclick=()=>{
   if(yesClicked)return;
-  msg.innerText=noTexts[i%noTexts.length];
+  msg.innerText = NO_MESSAGES[i % NO_MESSAGES.length];
   i++;
-  noBtn.style.left=Math.random()*140+"px";
-  noBtn.style.top=Math.random()*90+"px";
+  noBtn.style.left = Math.random()*120+"px";
+  noBtn.style.top = Math.random()*60+"px";
 };
 
 /* YES BUTTON */
 yesBtn.onclick=()=>{
   yesClicked=true;
   music.pause();
-  yesBtn.classList.add("hidden");
-  noBtn.classList.add("hidden");
-  msg.innerText="";
+  btnContainer.style.display="none";
+  msg.style.display="none";
   photoBox.style.display="flex";
   voice.play();
 
   voice.onended=()=>{
-    window.location.href=
-    "https://wa.me/917904090248?text=I%20said%20Yes%20💕";
+    const text=encodeURIComponent(WHATSAPP_MESSAGE);
+    window.location.href=`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
   };
 };
 </script>
